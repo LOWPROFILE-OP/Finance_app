@@ -1,0 +1,23 @@
+[
+  "tests/test_auth.py::test_login_invalido",
+  "tests/test_auth.py::test_login_success",
+  "tests/test_auth.py::test_signup_email_existente",
+  "tests/test_auth.py::test_signup_success",
+  "tests/test_security.py::test_sem_token",
+  "tests/test_security.py::test_sql_injection_falso",
+  "tests/test_security.py::test_token_invalido",
+  "tests/test_security.py::test_xss_em_descricao",
+  "tests/test_transactions.py::test_create_transaction",
+  "tests/test_transactions.py::test_get_transactions",
+  "tests/tests_advanced.py::test_access_with_invalid_token",
+  "tests/tests_advanced.py::test_access_without_token",
+  "tests/tests_advanced.py::test_create_transaction_invalid",
+  "tests/tests_advanced.py::test_create_transaction_valid",
+  "tests/tests_advanced.py::test_delete_transaction",
+  "tests/tests_advanced.py::test_full_flow",
+  "tests/tests_advanced.py::test_get_transactions_filters",
+  "tests/tests_advanced.py::test_sql_injection",
+  "tests/tests_advanced.py::test_token_expiry",
+  "tests/tests_advanced.py::test_update_transaction_partial",
+  "tests/tests_advanced.py::test_xss_in_description"
+]

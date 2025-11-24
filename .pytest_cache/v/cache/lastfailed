@@ -1,0 +1,8 @@
+{
+  "tests/tests_advanced.py::test_token_expiry": true,
+  "tests/tests_advanced.py::test_create_transaction_invalid": true,
+  "tests/tests_advanced.py::test_get_transactions_filters": true,
+  "tests/tests_advanced.py::test_update_transaction_partial": true,
+  "tests/tests_advanced.py::test_delete_transaction": true,
+  "tests/tests_advanced.py::test_full_flow": true
+}

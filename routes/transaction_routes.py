@@ -1,0 +1,87 @@
+from flask import Blueprint, request, jsonify
+from functools import wraps
+import jwt
+
+from controllers.transaction_controller import create_transaction, get_transactions, update_transaction, delete_transaction
+from models.user import User
+from config import Config
+from extensions import db
+
+transaction_routes = Blueprint('transaction_routes', __name__)
+
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization', None)
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 401
+        
+        try:
+        
+            token = token.split()[1]
+            data = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
+            current_user = db.session.get(User, data['user_id'])
+            if not current_user:
+                raise ValueError("Usuário não encontrado")
+        except Exception:
+            return jsonify({'message': 'Token inválido!'}), 401
+        
+        return f(current_user, *args, **kwargs)
+    
+    return decorated
+
+@transaction_routes.route('/transactions', methods=['POST'])
+@token_required
+def create_transaction_route(current_user):
+    data = request.get_json()
+    transaction = create_transaction(current_user.id, data)
+    return jsonify({
+        'id': transaction.id,
+        'tipo': transaction.tipo,
+        'categoria': transaction.categoria,
+        'valor': transaction.valor
+    }), 201
+
+
+@transaction_routes.route('/transactions', methods=['GET'])
+@token_required
+def get_transactions_route(current_user):
+    filters = request.args.to_dict()
+    transactions = get_transactions(current_user.id, filters)
+    output = [{
+        'id': t.id,
+        'tipo': t.tipo,
+        'categoria': t.categoria,
+        'valor': t.valor,
+        'data': t.data,
+        'descricao': t.descricao
+    } for t in transactions]
+    return jsonify({'transactions': output}), 200
+
+
+@transaction_routes.route('/transactions/<int:id>', methods=['PUT'])
+@token_required
+def update_transaction_route(current_user, id):
+    data = request.get_json()
+    transaction = update_transaction(current_user.id, id, data)
+    if not transaction:
+        return jsonify({'message': 'Transação não encontrada!'}), 404
+    
+    return jsonify({
+        'id': transaction.id,
+        'tipo': transaction.tipo,
+        'categoria': transaction.categoria,
+        'valor': transaction.valor,
+        'descricao': transaction.descricao
+    }), 200
+
+
+@transaction_routes.route('/transactions/<int:id>', methods=['DELETE'])
+@token_required
+def delete_transaction_route(current_user, id):
+    success = delete_transaction(current_user.id, id)
+    if not success:
+        return jsonify({'message': 'Transação não encontrada!'}), 404
+    
+    return jsonify({'message': 'Transação deletada com sucesso!'}), 200
