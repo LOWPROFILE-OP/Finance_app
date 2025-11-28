@@ -1,15 +1,21 @@
 # app.py
 from flask import Flask
-from config import Config
-from extensions import db, migrate
+from extensions import db
 from routes.auth_routes import auth_routes
 from routes.transaction_routes import transaction_routes
+import os
+
+
+class Config:
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'supersecretkey')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///finance.db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
+
 db.init_app(app)
-migrate.init_app(app, db)
 
 app.register_blueprint(auth_routes)
 app.register_blueprint(transaction_routes)

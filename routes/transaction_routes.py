@@ -4,7 +4,7 @@ import jwt
 
 from controllers.transaction_controller import create_transaction, get_transactions, update_transaction, delete_transaction
 from models.user import User
-from config import Config
+from app import Config
 from extensions import db
 
 transaction_routes = Blueprint('transaction_routes', __name__)

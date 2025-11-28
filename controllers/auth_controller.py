@@ -3,7 +3,7 @@ from models.user import User
 from extensions import db
 import jwt
 import datetime
-from config import Config
+from app import Config
 
 def generate_token(user):
     payload = {
