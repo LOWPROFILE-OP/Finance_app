@@ -1,9 +1,9 @@
-
-from models.user import User
-from extensions import db
+from src.models.user import User
+from src.extensions import db
+from src.config import Config
 import jwt
 import datetime
-from app import Config
+
 
 def generate_token(user):
     payload = {

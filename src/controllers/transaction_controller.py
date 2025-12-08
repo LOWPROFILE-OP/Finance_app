@@ -1,7 +1,8 @@
-
-from models.transaction import Transaction
-from extensions import db
+from src.models.transaction import Transaction
+from src.extensions import db
 from datetime import datetime
+
+
 
 def create_transaction(user_id, data):
     transaction = Transaction(

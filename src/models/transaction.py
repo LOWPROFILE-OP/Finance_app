@@ -1,4 +1,4 @@
-from extensions import db
+from src.extensions import db
 from datetime import datetime
 
 class Transaction(db.Model):

@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
-from controllers.auth_controller import signup, login
+from src.controllers.auth_controller import signup, login
+
+
 
 auth_routes = Blueprint('auth_routes', __name__)
 

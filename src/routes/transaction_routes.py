@@ -2,10 +2,10 @@ from flask import Blueprint, request, jsonify
 from functools import wraps
 import jwt
 
-from controllers.transaction_controller import create_transaction, get_transactions, update_transaction, delete_transaction
-from models.user import User
-from app import Config
-from extensions import db
+from src.controllers.transaction_controller import create_transaction, get_transactions, update_transaction, delete_transaction
+from src.models.user import User
+from src.extensions import db
+from src.config import Config
 
 transaction_routes = Blueprint('transaction_routes', __name__)
 
