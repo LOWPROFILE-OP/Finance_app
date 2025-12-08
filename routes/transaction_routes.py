@@ -13,23 +13,29 @@ transaction_routes = Blueprint('transaction_routes', __name__)
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = request.headers.get('Authorization', None)
-        if not token:
-            return jsonify({'message': 'Token is missing!'}), 401
-        
+        header = request.headers.get('Authorization')
+
+        if not header:
+            return jsonify({'message': 'Token ausente!'}), 401
+
+        parts = header.split()
+
+        if len(parts) != 2 or parts[0].lower() != 'bearer':
+            return jsonify({'message': 'Formato inválido do token!'}), 401
+
+        token = parts[1]
+
         try:
-        
-            token = token.split()[1]
             data = jwt.decode(token, Config.SECRET_KEY, algorithms=['HS256'])
             current_user = db.session.get(User, data['user_id'])
-            if not current_user:
-                raise ValueError("Usuário não encontrado")
+
         except Exception:
             return jsonify({'message': 'Token inválido!'}), 401
-        
+
         return f(current_user, *args, **kwargs)
-    
+
     return decorated
+
 
 @transaction_routes.route('/transactions', methods=['POST'])
 @token_required
@@ -54,7 +60,7 @@ def get_transactions_route(current_user):
         'tipo': t.tipo,
         'categoria': t.categoria,
         'valor': t.valor,
-        'data': t.data,
+        'data': t.data.isoformat(),
         'descricao': t.descricao
     } for t in transactions]
     return jsonify({'transactions': output}), 200

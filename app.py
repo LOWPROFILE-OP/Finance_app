@@ -1,4 +1,3 @@
-# app.py
 from flask import Flask
 from extensions import db
 from routes.auth_routes import auth_routes
